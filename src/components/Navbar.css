@@ -19,20 +19,23 @@
 }
 
 .nav-container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
+  width: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   font-weight: 800;
   font-size: 1.5rem;
   color: var(--text-primary);
   text-decoration: none;
   letter-spacing: -0.05em;
+  grid-column: 2;
 }
 
 .logo img {
@@ -42,13 +45,23 @@
   box-shadow: 0 0 15px var(--accent-glow);
 }
 
-.nav-links {
+.nav-side {
   display: flex;
   align-items: center;
   gap: 2.5rem;
 }
 
-.nav-links a {
+.nav-left {
+  justify-content: flex-start;
+  grid-column: 1;
+}
+
+.nav-right {
+  justify-content: flex-end;
+  grid-column: 3;
+}
+
+.nav-side a, .nav-link {
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
@@ -57,11 +70,11 @@
   position: relative;
 }
 
-.nav-links a:hover {
+.nav-side a:hover, .nav-link:hover {
   color: var(--text-primary);
 }
 
-.nav-links a.text-accent {
+.nav-side a.text-accent-btn, .text-accent-btn {
   color: var(--bg-color);
   background-color: var(--accent-primary);
   padding: 0.5rem 1.25rem;
@@ -69,14 +82,18 @@
   font-weight: 600;
 }
 
-.nav-links a.text-accent:hover {
+.nav-side a.text-accent-btn:hover, .text-accent-btn:hover {
   background-color: var(--accent-hover);
   box-shadow: 0 0 15px var(--accent-glow);
   color: var(--bg-color);
 }
 
 @media (max-width: 768px) {
-  .nav-links {
+  .nav-container {
+    display: flex;
+    justify-content: center;
+  }
+  .nav-side {
     display: none;
   }
 }
