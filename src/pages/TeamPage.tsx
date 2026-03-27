@@ -4,11 +4,12 @@ import { Mail, Briefcase, Lightbulb, Wrench, User, ChevronLeft } from 'lucide-re
 import '../components/Team.css';
 
 const teamMembers = [
-  { id: 1, name: "Nguyễn Văn A", role: "Giám Đốc Lãnh Đạo", image: "/team-1.jpg", stat1: "15 năm kinh nghiệm", stat2: "Chuyên gia chiến lược", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
-  { id: 2, name: "Trần Thị B", role: "Trưởng Phòng Marketing", image: "/team-2.jpg", stat1: "10 năm trong lĩnh vực", stat2: "Đam mê sáng tạo", icon1: <Lightbulb size={16} color="#3b82f6"/>, icon2: <Lightbulb size={16} color="#d97706"/> },
-  { id: 3, name: "Lê Văn C", role: "Chuyên Gia Kỹ Thuật", image: "/team-3.jpg", stat1: "Chuyên gia IT", stat2: "Đổi mới công nghệ", icon1: <Wrench size={16} color="#1e40af"/>, icon2: <Wrench size={16} color="#6b7280"/> },
-  { id: 4, name: "Phạm Minh D", role: "Thiết Kế Trải Nghiệm", image: "/team-4.jpg", stat1: "8 năm thiết kế UX/UI", stat2: "Sáng tạo giao diện", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
-  { id: 5, name: "Hoàng Lê E", role: "Trưởng Nhóm Dữ Liệu", image: "/team-5.jpg", stat1: "Phân tích hệ thống lớn", stat2: "Tối ưu hoá AI", icon1: <Wrench size={16} color="#3b82f6"/>, icon2: <Lightbulb size={16} color="#d97706"/> }
+  { id: 1, name: "Sơn Hoàng Hiếu", role: "Founder (CEO) - Giám đốc điều hành", image: "/team-1.jpg", stat1: "ĐH Nguyễn Tất Thành - Quản trị KD", stat2: "MSSV: 2200012147", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 2, name: "Vũ Thị Thơm", role: "Co-founder (CMO) - Giám đốc tiếp thị", image: "/team-2.jpg", stat1: "ĐH Nguyễn Tất Thành - Quản trị KD", stat2: "MSSV: 2311559764", icon1: <Briefcase size={16} color="#3b82f6"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 3, name: "Ng. Thị Bích Trâm", role: "Co-founder (CCO) - Giám đốc sáng tạo", image: "/team-3.jpg", stat1: "ĐH Nguyễn Tất Thành - Quản trị KD", stat2: "MSSV: 2311553463", icon1: <Lightbulb size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 4, name: "Bùi Thị Tuyên", role: "Co-founder (CFO) - Giám đốc tài chính", image: "/team-4.jpg", stat1: "ĐH Công Nghiệp TP.HCM - Quản trị KD", stat2: "MSSV: 22703911", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 5, name: "Mai T. Thiện Tâm", role: "Co-founder (CTO) - Giám đốc công nghệ", image: "/team-5.jpg", stat1: "Đại học Hùng Vương TP.HCM - Kỹ Thuật CN", stat2: "MSSV: 2305CT2070", icon1: <Wrench size={16} color="#3b82f6"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 6, name: "Trần Biểu", role: "Co-founder (COO) - Giám đốc vận hành", image: "/team-6.jpg", stat1: "Đại Học Văn Hiến - Kinh Tế Quản Trị", stat2: "MSSV: 231A230072", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> }
 ];
 
 const FbIcon = () => (
