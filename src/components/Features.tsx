@@ -25,7 +25,7 @@ const Features: React.FC = () => {
             { icon: '💬', title: 'Cộng Đồng Người Dùng', delay: 0.4 }
           ].map((feature, i) => (
              <motion.div 
-               className="feature-card"
+               className="feature-card glass-panel"
                key={i}
                initial={{ opacity: 0, y: 100, scale: 0.9 }}
                whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -41,7 +41,7 @@ const Features: React.FC = () => {
         </div>
         
         <motion.div 
-          className="feature-showcase"
+          className="feature-showcase glass-panel"
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-100px" }}
