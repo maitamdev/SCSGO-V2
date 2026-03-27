@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Globe, MessageSquare } from 'lucide-react';
+import { Mail, Globe, MessageSquare, ArrowRight } from 'lucide-react';
 import '../components/Team.css';
 
 const teamMembers = [
-  { id: 1, name: "Nguyễn Văn A", role: "Giám Đốc Kỹ Thuật (CTO)", image: "/team-1.jpg" },
-  { id: 2, name: "Trần Thế B", role: "Kiến Trúc Sư Phần Mềm", image: "/team-2.jpg" },
-  { id: 3, name: "Lý Đình C", role: "Chuyên Gia Dữ Liệu", image: "/team-3.jpg" },
-  { id: 4, name: "Phạm Minh D", role: "Thiết Kế Trải Nghiệm", image: "/team-4.jpg" },
-  { id: 5, name: "Hoàng Lê E", role: "Trưởng Nhóm Marketing", image: "/team-5.jpg" }
+  { id: 1, name: "Nguyễn Văn A", role: "Giám Đốc Lãnh Đạo (CEO)", image: "/team-1.jpg", desc: "Định hướng tầm nhìn và dẫn dắt SCSGO trở thành mạng lưới trạm sạc lớn nhất Việt Nam.", highlight: true },
+  { id: 2, name: "Trần Thế B", role: "Kiến Trúc Sư Phần Mềm", image: "/team-2.jpg", desc: "Thiết kế cốt lõi hạ tầng và hệ thống xử lý phân tán khổng lồ." },
+  { id: 3, name: "Lý Đình C", role: "Trưởng Phòng Dữ Liệu", image: "/team-3.jpg", desc: "Tối ưu hoá thuật toán dẫn đường, bản đồ thông minh và xử lý dữ liệu sạc thời gian thực." },
+  { id: 4, name: "Phạm Minh D", role: "Thiết Kế Trải Nghiệm", image: "/team-4.jpg", desc: "Đảm bảo mọi điểm chạm trên app đều mượt mà, trực quan chuẩn Apple." },
+  { id: 5, name: "Hoàng Lê E", role: "Giám Đốc Marketing", image: "/team-5.jpg", desc: "Kiến tạo cộng đồng SCSGO gắn kết và bền vững nhất khu vực." }
 ];
 
 const TeamPage: React.FC = () => {
@@ -16,65 +16,69 @@ const TeamPage: React.FC = () => {
     <main className="pt-24 min-h-screen">
       <section className="team-section" style={{ minHeight: 'calc(100vh - 200px)' }}>
         <div className="container">
+          
           <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
+            className="team-header-massive text-center"
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="text-gradient" style={{ marginBottom: "2rem" }}>Ban Điều Hành & Đội Ngũ</h1>
-            <p style={{ margin: "0 auto 4rem", maxWidth: "800px", fontSize: "1.2rem", color: "var(--text-secondary)" }}>
-              SCSGO được xây dựng và phát triển bởi 5 chuyên gia với hơn 10 năm kinh nghiệm trong lĩnh vực xe điện, hệ thống hạ tầng và công nghệ thông tin. Chúng tôi tin rằng tương lai thực thụ nằm ở sự dịch chuyển thông minh mang tính kết nối. Mình cùng tiến bước!
-            </p>
+            <h1>Sức Mạnh Phía Sau <br/><span className="text-accent-gradient">Kỷ Nguyên Mới.</span></h1>
+            <p>5 bộ óc. 1 tầm nhìn. Hàng nghìn trạm sạc trong tương lai.</p>
           </motion.div>
 
-          <div className="team-grid">
+          <div className="team-magazine-grid">
             {teamMembers.map((member, index) => (
               <motion.div 
                 key={member.id} 
-                className="team-card glass-panel"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
+                className={`mag-card ${member.highlight ? 'mag-hero' : ''}`}
+                initial={{ opacity: 0, scale: 0.95, y: 50 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: index * 0.15, type: "spring" }}
               >
-                <div className="team-avatar-wrapper">
-                  <div className="avatar-fallback">
-                    {member.name.split(' ').pop()?.charAt(0)}
-                  </div>
+                <div className={`mag-image-wrapper fallback-bg-${member.id}`}>
                   <img 
                     src={member.image} 
                     alt={member.name} 
-                    className="team-avatar"
-                    onError={(e) => {
-                      e.currentTarget.style.opacity = '0';
-                    }}
+                    className="mag-image"
+                    onError={(e) => { e.currentTarget.style.opacity = '0'; }}
                   />
+                  <div className="mag-overlay"></div>
                 </div>
                 
-                <div className="team-info">
-                  <h3 style={{ fontSize: "1.4rem" }}>{member.name}</h3>
-                  <span className="text-accent" style={{ fontSize: "1.1rem" }}>{member.role}</span>
+                <div className="mag-content">
+                  <div className="mag-content-main">
+                    <span className="mag-role">{member.role}</span>
+                    <h3 className="mag-name">{member.name}</h3>
+                  </div>
                   
-                  <div className="team-social">
-                    <a href="#" className="social-icon"><Mail size={20} /></a>
-                    <a href="#" className="social-icon"><Globe size={20} /></a>
-                    <a href="#" className="social-icon"><MessageSquare size={20} /></a>
+                  <div className="mag-content-hover">
+                    <p className="mag-desc">{member.desc}</p>
+                    <div className="mag-social text-accent">
+                      <a href="#"><Mail size={22} className="mag-icon" /></a>
+                      <a href="#"><Globe size={22} className="mag-icon" /></a>
+                      <a href="#"><MessageSquare size={22} className="mag-icon" /></a>
+                    </div>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
-          
+
           <motion.div 
-            className="text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            style={{ marginTop: "6rem" }}
+            className="team-join-cta"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.6 }}
           >
-            <a href="/" className="btn btn-secondary">Quay lại Trang Chủ</a>
+            <div className="cta-content text-center">
+              <h2>Bạn Đã Sẵn Sàng Trải Nghiệm?</h2>
+              <a href="/" className="btn btn-primary" style={{ marginTop: '1.5rem' }}>
+                Quay Trở Lại App <ArrowRight style={{ marginLeft: '10px' }} size={20} />
+              </a>
+            </div>
           </motion.div>
+
         </div>
       </section>
     </main>
