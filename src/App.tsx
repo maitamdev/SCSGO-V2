@@ -29,11 +29,15 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        {/* Immersive Fluid Background */}
+        {/* Immersive Fluid Background & Electric Lines */}
         <div className="aurora-bg">
           <div className="aurora-blob blob-1"></div>
           <div className="aurora-blob blob-2"></div>
           <div className="aurora-blob blob-3"></div>
+          
+          <div className="electric-line line-1"></div>
+          <div className="electric-line line-2"></div>
+          <div className="electric-line line-3"></div>
         </div>
         <div className="bg-grid"></div>
         <ScrollToTop />
