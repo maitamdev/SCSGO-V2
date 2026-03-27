@@ -13,31 +13,17 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <div className="nav-side nav-left">
-          {isTeamPage ? (
-            <Link to="/team" className="text-accent text-accent-btn">Đội Ngũ</Link>
-          ) : (
-            <>
-              <a href="#features">Tính Năng</a>
-              <a href="#community">Cộng Đồng</a>
-            </>
-          )}
-        </div>
-
         <Link to="/" className="logo">
           <img src="/logo.jpg" alt="SCSGO Logo" />
           <span>SCSGO</span>
         </Link>
         
-        <div className="nav-side nav-right">
-          {isTeamPage ? (
-            <Link to="/">Trang Chủ</Link>
-          ) : (
-            <>
-              <Link to="/team">Đội Ngũ</Link>
-              <a href="#download" className="text-accent text-accent-btn">Tải App</a>
-            </>
-          )}
+        <div className="nav-links">
+          <Link to="/">Trang Chủ</Link>
+          <a href="/#features">Tính Năng</a>
+          <a href="/#community">Cộng Đồng</a>
+          <Link to="/team" className={isTeamPage ? "text-accent" : ""}>Đội Ngũ</Link>
+          <a href="/#download" className="text-accent btn-primary" style={{ padding: '0.5rem 1.25rem', borderRadius: '100px', fontSize: '0.95rem' }}>Tải App</a>
         </div>
       </div>
     </nav>
