@@ -1,83 +1,110 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Globe, MessageSquare, ArrowRight } from 'lucide-react';
+import { Mail, Briefcase, Lightbulb, Wrench, User, ChevronLeft } from 'lucide-react';
 import '../components/Team.css';
 
 const teamMembers = [
-  { id: 1, name: "Nguyễn Văn A", role: "Giám Đốc Lãnh Đạo (CEO)", image: "/team-1.jpg", desc: "Định hướng tầm nhìn và dẫn dắt SCSGO trở thành mạng lưới trạm sạc lớn nhất Việt Nam.", highlight: true },
-  { id: 2, name: "Trần Thế B", role: "Kiến Trúc Sư Phần Mềm", image: "/team-2.jpg", desc: "Thiết kế cốt lõi hạ tầng và hệ thống xử lý phân tán khổng lồ." },
-  { id: 3, name: "Lý Đình C", role: "Trưởng Phòng Dữ Liệu", image: "/team-3.jpg", desc: "Tối ưu hoá thuật toán dẫn đường, bản đồ thông minh và xử lý dữ liệu sạc thời gian thực." },
-  { id: 4, name: "Phạm Minh D", role: "Thiết Kế Trải Nghiệm", image: "/team-4.jpg", desc: "Đảm bảo mọi điểm chạm trên app đều mượt mà, trực quan chuẩn Apple." },
-  { id: 5, name: "Hoàng Lê E", role: "Giám Đốc Marketing", image: "/team-5.jpg", desc: "Kiến tạo cộng đồng SCSGO gắn kết và bền vững nhất khu vực." }
+  { id: 1, name: "Nguyễn Văn A", role: "Giám Đốc Lãnh Đạo", image: "/team-1.jpg", stat1: "15 năm kinh nghiệm", stat2: "Chuyên gia chiến lược", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 2, name: "Trần Thị B", role: "Trưởng Phòng Marketing", image: "/team-2.jpg", stat1: "10 năm trong lĩnh vực", stat2: "Đam mê sáng tạo", icon1: <Lightbulb size={16} color="#3b82f6"/>, icon2: <Lightbulb size={16} color="#d97706"/> },
+  { id: 3, name: "Lê Văn C", role: "Chuyên Gia Kỹ Thuật", image: "/team-3.jpg", stat1: "Chuyên gia IT", stat2: "Đổi mới công nghệ", icon1: <Wrench size={16} color="#1e40af"/>, icon2: <Wrench size={16} color="#6b7280"/> },
+  { id: 4, name: "Phạm Minh D", role: "Thiết Kế Trải Nghiệm", image: "/team-4.jpg", stat1: "8 năm thiết kế UX/UI", stat2: "Sáng tạo giao diện", icon1: <Briefcase size={16} color="#1e40af"/>, icon2: <User size={16} color="#d97706"/> },
+  { id: 5, name: "Hoàng Lê E", role: "Trưởng Nhóm Dữ Liệu", image: "/team-5.jpg", stat1: "Phân tích hệ thống lớn", stat2: "Tối ưu hoá AI", icon1: <Wrench size={16} color="#3b82f6"/>, icon2: <Lightbulb size={16} color="#d97706"/> }
 ];
+
+const FbIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none" style={{ background: '#3b5998', borderRadius: '4px', padding: '2px' }}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+
+const InIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none" style={{ background: '#0077b5', borderRadius: '4px', padding: '2px' }}>
+    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.39h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94V10.11H5.49v8.39h2.78z"></path>
+  </svg>
+);
+
+const MailIconWrapper = () => (
+  <div style={{ background: '#9ca3af', borderRadius: '4px', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+     <Mail size={12} color="white" />
+  </div>
+);
 
 const TeamPage: React.FC = () => {
   return (
-    <main className="pt-24 min-h-screen">
-      <section className="team-section" style={{ minHeight: 'calc(100vh - 200px)' }}>
-        <div className="container">
+    <main className="team-page-wrapper">
+      <section className="classic-team-section">
+        <div className="container" style={{ maxWidth: '1200px' }}>
           
-          <motion.div 
-            className="team-header-massive text-center"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <h1>Sức Mạnh Phía Sau <br/><span className="text-accent-gradient">Kỷ Nguyên Mới.</span></h1>
-            <p>5 bộ óc. 1 tầm nhìn. Hàng nghìn trạm sạc trong tương lai.</p>
-          </motion.div>
+          <div className="classic-header text-center">
+            <h1>ĐỘI NGŨ CỦA CHÚNG TÔI</h1>
+            <div className="classic-subtitle">
+              <span></span>
+              <p>Meet Our Team</p>
+              <span></span>
+            </div>
+            <p className="classic-desc">
+              Chúng tôi gồm những chuyên gia giàu kinh nghiệm, tận tâm và sáng tạo trong lĩnh vực của mình.
+            </p>
+          </div>
 
-          <div className="team-magazine-grid">
+          <div className="classic-team-grid">
             {teamMembers.map((member, index) => (
               <motion.div 
                 key={member.id} 
-                className={`mag-card ${member.highlight ? 'mag-hero' : ''}`}
-                initial={{ opacity: 0, scale: 0.95, y: 50 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: index * 0.15, type: "spring" }}
+                className="classic-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
               >
-                <div className={`mag-image-wrapper fallback-bg-${member.id}`}>
+                <div className="classic-image-wrapper">
+                  <div className="classic-fallback">
+                    <User size={64} color="#d1d5db" />
+                  </div>
                   <img 
                     src={member.image} 
                     alt={member.name} 
-                    className="mag-image"
+                    className="classic-image"
                     onError={(e) => { e.currentTarget.style.opacity = '0'; }}
                   />
-                  <div className="mag-overlay"></div>
                 </div>
                 
-                <div className="mag-content">
-                  <div className="mag-content-main">
-                    <span className="mag-role">{member.role}</span>
-                    <h3 className="mag-name">{member.name}</h3>
-                  </div>
+                <div className="classic-info">
+                  <h3>{member.name}</h3>
+                  <div className="classic-divider"></div>
+                  <span className="classic-role">{member.role}</span>
                   
-                  <div className="mag-content-hover">
-                    <p className="mag-desc">{member.desc}</p>
-                    <div className="mag-social text-accent">
-                      <a href="#"><Mail size={22} className="mag-icon" /></a>
-                      <a href="#"><Globe size={22} className="mag-icon" /></a>
-                      <a href="#"><MessageSquare size={22} className="mag-icon" /></a>
+                  <div className="classic-stats">
+                    <div className="stat-item">
+                      {member.icon1}
+                      <span>{member.stat1}</span>
                     </div>
+                    <div className="stat-item">
+                      {member.icon2}
+                      <span>{member.stat2}</span>
+                    </div>
+                  </div>
+
+                  <div className="classic-divider" style={{ margin: '1rem 0' }}></div>
+                  
+                  <div className="classic-footer">
+                    <div className="classic-social">
+                      <a href="#"><FbIcon /></a>
+                      <a href="#"><InIcon /></a>
+                      <a href="#"><MailIconWrapper /></a>
+                    </div>
+                    <button className="classic-btn">Xem Thêm</button>
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
-          <motion.div 
-            className="team-join-cta"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-          >
-            <div className="cta-content text-center">
-              <h2>Bạn Đã Sẵn Sàng Trải Nghiệm?</h2>
-              <a href="/" className="btn btn-primary" style={{ marginTop: '1.5rem' }}>
-                Quay Trở Lại App <ArrowRight style={{ marginLeft: '10px' }} size={20} />
-              </a>
-            </div>
-          </motion.div>
+          <div className="text-center" style={{ marginTop: '4rem' }}>
+            <a href="/" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '0.75rem 2rem' }}>
+              <ChevronLeft size={20} /> Quay lại App
+            </a>
+          </div>
 
         </div>
       </section>
