@@ -13,13 +13,30 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <Link to="/" className="logo">
+        <Link 
+          to="/" 
+          className="logo"
+          onClick={() => {
+            if (location.pathname === '/') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
+        >
           <img src="/logo.jpg" alt="SCSGO Logo" />
           <span>SCSGO</span>
         </Link>
         
         <div className="nav-links">
-          <Link to="/">Trang Chủ</Link>
+          <Link 
+            to="/"
+            onClick={() => {
+              if (location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+          >
+            Trang Chủ
+          </Link>
           <a href="/#features">Tính Năng</a>
           <a href="/#community">Cộng Đồng</a>
           <Link to="/team" className={isTeamPage ? "text-accent" : ""}>Đội Ngũ</Link>
