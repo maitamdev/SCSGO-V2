@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Linkedin, Twitter, Github } from 'lucide-react';
+import { Mail, Globe, MessageSquare } from 'lucide-react';
 import './Team.css';
 
 const teamMembers = [
@@ -57,9 +57,9 @@ const Team: React.FC = () => {
                 <span className="text-accent">{member.role}</span>
                 
                 <div className="team-social">
-                  <a href="#" className="social-icon"><Linkedin size={18} /></a>
-                  <a href="#" className="social-icon"><Twitter size={18} /></a>
-                  <a href="#" className="social-icon"><Github size={18} /></a>
+                  <a href="#" className="social-icon"><Mail size={18} /></a>
+                  <a href="#" className="social-icon"><Globe size={18} /></a>
+                  <a href="#" className="social-icon"><MessageSquare size={18} /></a>
                 </div>
               </div>
             </motion.div>
