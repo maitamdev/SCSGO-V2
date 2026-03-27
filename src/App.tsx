@@ -1,13 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Features from './components/Features';
-import HowItWorks from './components/HowItWorks';
-import Testimonials from './components/Testimonials';
-import Marquee from './components/Marquee';
-import Showcase from './components/Showcase';
-import Team from './components/Team';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import TeamPage from './pages/TeamPage';
 
 function App() {
   const [scrolled, setScrolled] = React.useState(false);
@@ -21,29 +17,26 @@ function App() {
   }, []);
 
   return (
-    <div className="app-container">
-      {/* Immersive Fluid Background */}
-      <div className="aurora-bg">
-        <div className="aurora-blob blob-1"></div>
-        <div className="aurora-blob blob-2"></div>
-        <div className="aurora-blob blob-3"></div>
+    <Router>
+      <div className="app-container">
+        {/* Immersive Fluid Background */}
+        <div className="aurora-bg">
+          <div className="aurora-blob blob-1"></div>
+          <div className="aurora-blob blob-2"></div>
+          <div className="aurora-blob blob-3"></div>
+        </div>
+        <div className="bg-grid"></div>
+        
+        <Navbar scrolled={scrolled} />
+        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/team" element={<TeamPage />} />
+        </Routes>
+        
+        <Footer />
       </div>
-      <div className="bg-grid"></div>
-      
-      <Navbar scrolled={scrolled} />
-      
-      <main>
-        <Hero />
-        <Marquee />
-        <Showcase />
-        <HowItWorks />
-        <Features />
-        <Testimonials />
-        <Team />
-      </main>
-      
-      <Footer />
-    </div>
+    </Router>
   );
 }
 
