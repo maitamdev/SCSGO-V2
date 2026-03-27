@@ -6,6 +6,7 @@ import HowItWorks from './components/HowItWorks';
 import Testimonials from './components/Testimonials';
 import Marquee from './components/Marquee';
 import Showcase from './components/Showcase';
+import Team from './components/Team';
 import Footer from './components/Footer';
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <HowItWorks />
         <Features />
         <Testimonials />
+        <Team />
       </main>
       
       <Footer />
