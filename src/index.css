@@ -43,39 +43,41 @@ body {
 
 .aurora-blob {
   position: absolute;
-  filter: blur(180px);
+  filter: blur(150px);
   border-radius: 50%;
   animation: float-aurora 25s infinite alternate ease-in-out;
-  opacity: 0.12;
+  opacity: 0.45;
 }
 
 .aurora-blob.blob-1 {
-  background: var(--accent-primary);
+  background: #06B6D4; /* Bright Neon Cyan */
   width: 55vw;
   height: 55vw;
   top: -15%;
   left: -5%;
   animation-duration: 28s;
+  box-shadow: 0 0 100px #06B6D4;
 }
 
 .aurora-blob.blob-2 {
-  background: var(--accent-secondary);
+  background: #3B82F6; /* Bright Electric Blue */
   width: 45vw;
   height: 45vw;
   bottom: -5%;
   right: -5%;
   animation-duration: 32s;
   animation-direction: alternate-reverse;
+  box-shadow: 0 0 100px #3B82F6;
 }
 
 .aurora-blob.blob-3 {
-  background: #0284C7; /* Deep Sky Blue */
+  background: #0ea5e9; /* Sky Blue */
   width: 35vw;
   height: 35vw;
   top: 35%;
   left: 25%;
   animation-duration: 22s;
-  opacity: 0.08;
+  opacity: 0.3;
 }
 
 @keyframes float-aurora {
