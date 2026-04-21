@@ -98,7 +98,13 @@
   position: relative;
   width: 100%;
   height: 350px;
-  animation: float 4s ease-in-out infinite;
+  animation: car-float-no-tilt 4s ease-in-out infinite;
+}
+
+@keyframes car-float-no-tilt {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
 }
 
 .vf7-car-img {
@@ -143,6 +149,75 @@
   height: 20px;
   background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
   border-radius: 50%;
+}
+
+/* HUD Tech Wire Effect */
+.sleek-energy-wire {
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  width: 100px;
+  height: 150px;
+  z-index: -1; 
+  pointer-events: none;
+}
+
+.sleek-wire-base {
+  fill: none;
+  stroke: rgba(34, 197, 94, 0.2);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.sleek-wire-flow {
+  fill: none;
+  stroke: #22c55e;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 10 20;
+  animation: sleek-flow 1.5s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.8));
+}
+
+@keyframes sleek-flow {
+  0% { stroke-dashoffset: 30; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Charge Progress Bar */
+.vf7-charge-bar {
+  width: 150px;
+  height: 6px;
+  background-color: #cbd5e1;
+  border-radius: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.vf7-charge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #4ade80);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.vf7-charge-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+  animation: sweep 1.5s linear infinite;
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
 
 .delay-1 {

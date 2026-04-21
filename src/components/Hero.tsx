@@ -9,16 +9,21 @@ const Hero: React.FC = () => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Battery random ticker up to 80
+    // Fast charging effect: runs from 25 to 100 and stops
     const batteryInterval = setInterval(() => {
       setBattery(prev => {
-        if (prev < 80) {
-          const next = prev + Math.floor(Math.random() * 2) + 1;
-          return next > 80 ? 80 : next;
+        if (prev >= 100) {
+          clearInterval(batteryInterval);
+          return 100;
         }
-        return 80;
+        const next = prev + Math.floor(Math.random() * 3) + 1;
+        if (next >= 100) {
+          clearInterval(batteryInterval);
+          return 100;
+        }
+        return next;
       });
-    }, 1500);
+    }, 40); // 40ms per tick makes it even smoother
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -69,8 +74,19 @@ const Hero: React.FC = () => {
           <div className="hero-right-col fade-scale-in delay-1">
             <div className="vf7-scene">
               <div className="vf7-overlay-ui">
+                {/* Tech wire connecting the stats to the floor */}
+                <svg className="sleek-energy-wire" viewBox="0 0 100 200" preserveAspectRatio="none">
+                  <path className="sleek-wire-base" d="M 10 10 L 10 150 Q 10 180 50 180 L 100 180" />
+                  <path className="sleek-wire-flow" d="M 10 10 L 10 150 Q 10 180 50 180 L 100 180" />
+                </svg>
+                
                 <div className="vf7-battery-stats">{battery}%</div>
                 <div className="vf7-status-text">CHARGING VF7...</div>
+                
+                {/* Animated tech progress bar / battery indicator */}
+                <div className="vf7-charge-bar">
+                  <div className="vf7-charge-fill" style={{ width: `${battery}%` }}></div>
+                </div>
               </div>
 
               <div className="vf7-car-wrapper">
