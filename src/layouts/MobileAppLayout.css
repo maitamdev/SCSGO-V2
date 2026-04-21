@@ -1,0 +1,82 @@
+/* Shell wrapping the entire mobile app view */
+.mobile-app-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: #e2e8f0;
+}
+
+/* The phone-like container */
+.mobile-app-container {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.12);
+}
+
+/* Scrollable content area */
+.mobile-app-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Bottom Navigation */
+.mobile-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #ffffff;
+  padding: 6px 0 env(safe-area-inset-bottom, 8px);
+  border-top: 1px solid #f1f5f9;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 12px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.mobile-nav-item span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.mobile-nav-item.active {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.mobile-nav-item.active span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* Desktop: show phone shadow centered */
+@media (min-width: 640px) {
+  .mobile-app-container {
+    border-radius: 24px;
+    margin: 20px 0;
+    min-height: calc(100vh - 40px);
+    max-height: calc(100vh - 40px);
+    overflow: hidden;
+  }
+}
