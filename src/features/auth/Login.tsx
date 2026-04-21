@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { supabase } from '../../lib/supabase';
 import './Login.css';
 
 export default function LoginScreen() {
@@ -31,6 +32,15 @@ export default function LoginScreen() {
   const toggleMode = () => {
     setIsSignUp(!isSignUp);
     clearError();
+  };
+
+  const handleGoogleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/app/home',
+      },
+    });
   };
 
   return (
@@ -101,7 +111,7 @@ export default function LoginScreen() {
         <div className="login-divider"><span>hoặc</span></div>
 
         {/* Google */}
-        <button type="button" className="login-btn-google" disabled={isLoading}>
+        <button type="button" className="login-btn-google" disabled={isLoading} onClick={handleGoogleLogin}>
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" height="20" />
           Đăng nhập bằng Google
         </button>
