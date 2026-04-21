@@ -1,68 +1,38 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Globe, MessageSquare } from 'lucide-react';
 import './Team.css';
 
 const teamMembers = [
-  { id: 1, name: "Nguyễn Văn A", role: "Trưởng Dự Án / CEO", image: "/team-1.jpg" },
-  { id: 2, name: "Trần Thị B", role: "Giám Đốc Kỹ Thuật (CTO)", image: "/team-2.jpg" },
-  { id: 3, name: "Lê Văn C", role: "Trưởng Bộ Phận Thiết Kế", image: "/team-3.jpg" },
-  { id: 4, name: "Phạm Thị D", role: "Chuyên Viên Marketing", image: "/team-4.jpg" }
+  { id: 1, name: "Sơn Hoàng Hiếu", role: "Founder (CEO)", img: "/hieu.jpg" },
+  { id: 2, name: "Vũ Thị Thơm", role: "Co-founder (CMO)", img: "/thom.jpg" },
+  { id: 3, name: "Ng. Thị Bích Trâm", role: "Co-founder (CCO)", img: "/tram.jpg" },
+  { id: 4, name: "Bùi Thị Tuyên", role: "Co-founder (CFO)", img: "/tuyen.jpg" },
+  { id: 5, name: "Mai T. Thiện Tâm", role: "Co-founder (CTO)", img: "/tam.jpg" },
+  { id: 6, name: "Trần Biểu", role: "Co-founder (COO)", img: "/bieu.jpg" }
 ];
 
 const Team: React.FC = () => {
   return (
-    <section id="team" className="team-section">
+    <section className="qq-team-section">
       <div className="container">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-gradient">Đội Ngũ Của Chúng Tôi.</h2>
-          <p>Những con người đứng đằng sau hệ sinh thái xe điện thông minh SCSGO.</p>
-        </motion.div>
+        <div className="team-header-box text-center">
+          <div className="qq-badge">ĐỘI NGŨ SCSGO</div>
+          <h2 className="qq-team-title">Gương Mặt Thương Hiệu</h2>
+          <p className="qq-team-subtitle">Những con người nhiệt huyết đứng sau sự thành công của trạm sạc thông minh.</p>
+        </div>
 
-        <div className="team-grid">
-          {teamMembers.map((member, index) => (
-            <motion.div 
-              key={member.id} 
-              className="team-card glass-panel"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              whileHover={{ y: -10 }}
-            >
-              <div className="team-avatar-wrapper">
-                {/* Fallback gradient if image not found */}
-                <div className="avatar-fallback">
-                  {member.name.split(' ').pop()?.charAt(0)}
-                </div>
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
-                  className="team-avatar"
-                  onError={(e) => {
-                    // Hide image if not found, fallback will show underneath
-                    e.currentTarget.style.opacity = '0';
-                  }}
-                />
+        <div className="qq-team-grid">
+          {teamMembers.map((member) => (
+            <div key={member.id} className="qq-team-card">
+              <div className="avatar-wrapper">
+                <img src={member.img} alt={member.name} className="qq-avatar" />
+                <div className="avatar-bubble b1"></div>
+                <div className="avatar-bubble b2"></div>
               </div>
-              
               <div className="team-info">
                 <h3>{member.name}</h3>
-                <span className="text-accent">{member.role}</span>
-                
-                <div className="team-social">
-                  <a href="#" className="social-icon"><Mail size={18} /></a>
-                  <a href="#" className="social-icon"><Globe size={18} /></a>
-                  <a href="#" className="social-icon"><MessageSquare size={18} /></a>
-                </div>
+                <span className="qq-role">{member.role}</span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

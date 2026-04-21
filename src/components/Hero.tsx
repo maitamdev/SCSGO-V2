@@ -1,114 +1,91 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import './Hero.css';
 
 const Hero: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
+  const [scrollY, setScrollY] = useState(0);
+  const [battery, setBattery] = useState(25);
 
-  // Scroll animations
-  const yElement = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const opacityElement = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const rotateMockup = useTransform(scrollYProgress, [0, 1], [15, 0]);
-  const scaleMockup = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Battery random ticker up to 80
+    const batteryInterval = setInterval(() => {
+      setBattery(prev => {
+        if (prev < 80) {
+          const next = prev + Math.floor(Math.random() * 2) + 1;
+          return next > 80 ? 80 : next;
+        }
+        return 80;
+      });
+    }, 1500);
 
-  // Smooth mouse tracking
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    const x = (clientX / innerWidth - 0.5) * 20; // -10 to 10 degrees
-    const y = (clientY / innerHeight - 0.5) * -20; // -10 to 10 degrees
-    setMousePosition({ x, y });
-  };
-
-  const titleText = "Xe Điện Của Bạn.";
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearInterval(batteryInterval);
+    };
+  }, []);
 
   return (
-    <section 
-      className="hero" 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-    >
-      <div className="container hero-container text-center">
-        <motion.div 
-          className="hero-content"
-          style={{ y: yElement, opacity: opacityElement }}
-        >
+    <section className="qq-hero">
+      {/* Background doodles with parallax effect */}
+      <div 
+        className="doodle-layer" 
+        style={{ transform: `translateY(${scrollY * 0.4}px)` }}
+      >
+        <div className="doodle doodle-1">⚡</div>
+        <div className="doodle doodle-2">🚗</div>
+        <div className="doodle doodle-3">🔋</div>
+        <div className="doodle doodle-4">🔌</div>
+        <div className="doodle doodle-5">✨</div>
+        <div className="doodle doodle-6">📍</div>
+      </div>
+      
+      {/* Cloud Blobs */}
+      <div className="cloud-blob blob-1"></div>
+      <div className="cloud-blob blob-2"></div>
+      
+      <div className="container hero-container position-relative">
+        <div className="hero-grid">
           
-          <motion.div 
-            className="hero-badge"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <span className="badge-glow"></span>
-            <span className="badge-text" style={{ color: '#fff' }}>SCSGO v3.0 - Bản cập nhật mới nhất</span>
-          </motion.div>
+          {/* Cột trái: Text Card */}
+          <div className="hero-left-col">
+            <div className="qq-hero-card fade-scale-in">
+              <h1 className="qq-hero-title">TRẠM SẠC SCSGO<br/>GẦN ĐÂY</h1>
+              <p className="qq-hero-subtitle">Mở app SCSGO là chạm ngay vào tiện ích sạc vạn năng!</p>
+              
+              <div className="qq-app-buttons">
+                <a href="#" className="btn-app">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" />
+                </a>
+                <a href="#" className="btn-app">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" />
+                </a>
+              </div>
+            </div>
+          </div>
 
-          <motion.img 
-            src="/logo.jpg" 
-            alt="SCSGO App Logo" 
-            className="hero-app-logo"
-            initial={{ opacity: 0, y: -50, rotate: -20 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 10 }}
-            whileHover={{ scale: 1.1, rotate: 5 }}
-          />
+          {/* Cột phải: Animation Xe VF7 */}
+          <div className="hero-right-col fade-scale-in delay-1">
+            <div className="vf7-scene">
+              <div className="vf7-overlay-ui">
+                <div className="vf7-battery-stats">{battery}%</div>
+                <div className="vf7-status-text">CHARGING VF7...</div>
+              </div>
 
-          <h1>
-            Giải Pháp Toàn Diện Cho <br/>
-            <span className="text-accent-gradient">
-              {titleText.split('').map((char, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 + index * 0.05 }}
-                >
-                  {char}
-                </motion.span>
-              ))}
-            </span>
-          </h1>
-          
-          <motion.p 
-            className="subtitle"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
-            Từ việc tìm kiếm trạm sạc nhanh nhất đến đặt lịch và thanh toán tiện lợi. Mọi thứ bạn cần cho chuyến đi tiếp theo đều nằm gọn trong ứng dụng SCSGO.
-          </motion.p>
-          
-          <motion.div 
-            className="hero-cta"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-          >
-            <a href="#download" className="btn btn-primary">Tải Ứng Dụng Ngay</a>
-            <a href="#features" className="btn btn-secondary">Xem Tính Năng</a>
-          </motion.div>
-        </motion.div>
-        
-        <motion.div 
-          className="hero-mockup-container"
-          initial={{ opacity: 0, y: 150 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 1.5, type: "spring", damping: 20 }}
-          style={{ 
-            rotateX: mousePosition.y || rotateMockup,
-            rotateY: mousePosition.x,
-            scale: scaleMockup
-          }}
-        >
-          <div className="hero-mockup-glow"></div>
-          <img src="/hero_mockup.png" alt="SCSGO App Interface" className="mockup-img-huge" />
-        </motion.div>
+              <div className="vf7-car-wrapper">
+                <img src="/vf7.png" alt="Vinfast VF7 EV" className="vf7-car-img" />
+              </div>
+              
+              <div className="vf7-floor-glow"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div className="bounce-arrow">
+        ↓
       </div>
     </section>
   );

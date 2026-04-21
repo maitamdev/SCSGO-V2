@@ -1,123 +1,233 @@
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 15vh;
+.qq-hero {
+  background-color: var(--bg-hero);
+  min-height: 85vh;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
 }
 
-.hero-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Doodle layer for Parallax */
+.doodle-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-}
-
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  z-index: 10;
-}
-
-.hero-app-logo {
-  width: 100px;
-  height: 100px;
-  border-radius: 28px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1), 0 0 40px var(--accent-glow);
-  margin-bottom: 2rem;
-  animation: floatAppLogo 6s ease-in-out infinite;
-}
-
-@keyframes floatAppLogo {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 100px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.badge-text {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--accent-primary);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  height: 100%;
+  pointer-events: none;
   z-index: 1;
 }
 
-.subtitle {
+.doodle {
+  position: absolute;
+  font-size: 2.5rem;
+  opacity: 0.15;
+}
+
+.doodle-1 { top: 15%; left: 10%; transform: rotate(-15deg); font-size: 4rem; }
+.doodle-2 { top: 25%; right: 15%; transform: rotate(20deg); font-size: 3rem; }
+.doodle-3 { bottom: 30%; left: 20%; transform: rotate(-30deg); font-size: 3.5rem; }
+.doodle-4 { bottom: 20%; right: 25%; transform: rotate(10deg); font-size: 4rem; }
+.doodle-5 { top: 40%; left: 5%; transform: rotate(45deg); font-size: 2rem; }
+.doodle-6 { top: 60%; right: 8%; transform: rotate(-25deg); font-size: 2.5rem; }
+
+/* Cloud Blobs */
+.cloud-blob {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  z-index: 0;
+  animation: float 6s ease-in-out infinite;
+}
+
+.blob-1 { width: 15vw; height: 15vw; top: 15%; left: 10%; animation-duration: 8s; }
+.blob-2 { width: 25vw; height: 25vw; top: 40%; right: 5%; animation-duration: 10s; animation-direction: reverse; }
+
+/* Central Card & Grid Layout */
+.hero-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem; /* Làm 2 bên xa nhau ra */
+  align-items: center;
+  max-width: 1400px; /* Tăng độ rộng tổng để có không gian */
   margin: 0 auto;
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  font-weight: 400;
 }
 
-.hero-cta {
+.hero-left-col {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  margin-bottom: 5rem;
+  justify-content: flex-end;
 }
 
-.hero-mockup-container {
+.hero-right-col {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.qq-hero-card {
+  background: #fff;
+  border-radius: 40px;
+  padding: 4rem;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(61, 164, 228, 0.15);
+  max-width: 500px; /* narrowed since it's a side column now */
+  width: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* VF7 Scene Integration */
+.vf7-scene {
   position: relative;
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  perspective: 2000px;
+  max-width: 600px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.hero-mockup-glow {
+.vf7-car-wrapper {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.vf7-car-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Blend edge with the blue hero background securely */
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 40%, transparent 100%);
+}
+
+.vf7-overlay-ui {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  height: 60%;
-  background: var(--accent-primary);
-  filter: blur(150px);
-  opacity: 0.4;
-  z-index: -1;
+  top: 20px; /* Hạ xuống 1 xíu để vào vùng tối bức ảnh */
+  left: 30px; /* Đẩy sang góc trái ảnh - vùng đen đen */
+  text-align: left;
+  z-index: 10;
+  transform: none; /* remove center transform */
+}
+
+.vf7-battery-stats {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #22c55e;
+  text-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+  line-height: 1;
+}
+
+.vf7-status-text {
+  margin-top: 5px;
+  font-size: 1.2rem;
+  color: #1e293b;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.vf7-floor-glow {
+  position: absolute;
+  bottom: 0px;
+  width: 400px;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
   border-radius: 50%;
 }
 
-.mockup-img-huge {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  /* Rotate slightly for depth */
-  transform: rotateX(15deg) translateY(20px);
-  transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 50px 100px rgba(0,0,0,0.8));
-  border-radius: 48px;
-  border: 4px solid #1a1e29;
+.delay-1 {
+  animation-delay: 0.2s;
 }
 
-.mockup-img-huge:hover {
-  transform: rotateX(5deg) translateY(0);
+/* Animations */
+.fade-scale-in {
+  animation: fadeScaleIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+}
+
+@keyframes fadeScaleIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.qq-hero-title {
+  color: var(--text-highlight);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  transform: rotate(-2deg); /* Quanquen playful tilt */
+  display: inline-block;
+}
+
+.qq-hero-subtitle {
+  color: var(--text-main);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+}
+
+.qq-app-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.btn-app img {
+  height: 50px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-app:hover img {
+  transform: translateY(-5px) scale(1.08); /* Bounce scale on hover */
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+}
+
+/* Bouncing Arrow */
+.bounce-arrow {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: var(--text-main);
+  animation: bounce 2s infinite;
+  z-index: 10;
+  opacity: 0.5;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+  40% { transform: translateY(-20px) translateX(-50%); }
+  60% { transform: translateY(-10px) translateX(-50%); }
 }
 
 @media (max-width: 768px) {
-  .hero-cta {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .qq-hero-card {
+    padding: 2.5rem 1.5rem;
+    border-radius: 24px;
+  }
+  .qq-app-buttons {
     flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-    gap: 1rem;
+    align-items: center;
+  }
+  .hero-left-col, .hero-right-col {
+    justify-content: center;
   }
 }
