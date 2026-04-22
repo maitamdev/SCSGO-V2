@@ -8,6 +8,7 @@ import Showcase from './components/Showcase';
 import Features from './components/Features';
 import Team from './components/Team';
 import Footer from './components/Footer';
+import Chatbot from './components/Chatbot';
 import './App.css';
 
 // App components
@@ -30,6 +31,7 @@ function LandingPage() {
       <Features />
       <Team />
       <Footer />
+      <Chatbot />
     </div>
   );
 }
