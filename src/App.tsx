@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 // Landing page components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Showcase from './components/Showcase';
 import Features from './components/Features';
 import Team from './components/Team';
 import Footer from './components/Footer';
@@ -25,6 +26,7 @@ function LandingPage() {
     <div className="app-container">
       <Navbar />
       <Hero />
+      <Showcase />
       <Features />
       <Team />
       <Footer />
