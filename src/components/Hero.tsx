@@ -60,6 +60,17 @@ const Hero: React.FC = () => {
               <p className="qq-hero-subtitle">Mở app SCSGO là chạm ngay vào tiện ích sạc vạn năng!</p>
               
               <div className="qq-app-buttons">
+                <a href="/scsgo-latest.apk" className="btn-app-apk" download>
+                  <span className="btn-app-apk-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                      <path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-.9997s.4483-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993.0004.5511-.4482.9997-.9993.9997m-11.046 0c-.5511 0-.9993-.4486-.9993-.9997s.4482-.9993.9993-.9993c.5511 0 .9993.4482.9993.9993 0 .5511-.4482.9997-.9993.9997m11.4045-6.02l1.9973-3.4592c.1158-.2013.0468-.4564-.1535-.5722-.2009-.1158-.4575-.0464-.573.1539l-2.025 3.5065c-1.4727-.6742-3.1492-1.0463-4.9431-1.0463-1.7943 0-3.4704.3721-4.9435 1.0463L5.2157 5.444c-.1158-.2006-.3717-.2697-.573-.1539-.2013.1158-.2693.3709-.1535.5722l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.761h24c-.3436-4.1021-2.6892-7.5743-6.4725-9.4396"/>
+                    </svg>
+                  </span>
+                  <div className="btn-app-apk-text">
+                    <span className="btn-app-apk-sub">Tải xuống</span>
+                    <span className="btn-app-apk-main">Android APK</span>
+                  </div>
+                </a>
                 <a href="#" className="btn-app">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" />
                 </a>
