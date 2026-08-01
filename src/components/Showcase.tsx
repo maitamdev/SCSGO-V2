@@ -14,7 +14,7 @@ const screens: ScreenItem[] = [
     id: 'map',
     src: '/screenshots/screen_map.jpg',
     title: 'Bản đồ trạm sạc',
-    desc: 'Tìm trạm sạc gần nhất với bộ lọc theo danh mục — chỉ trong 1 chạm',
+    desc: 'Tìm trạm sạc gần nhất với bộ lọc theo danh mục, chỉ trong một chạm',
     step: '01',
   },
   {
@@ -28,7 +28,7 @@ const screens: ScreenItem[] = [
     id: 'slot',
     src: '/screenshots/screen_slot_select.jpg',
     title: 'Chọn chỗ sạc',
-    desc: 'Xem trạng thái realtime — Trống, Đang sạc hay Bảo trì',
+    desc: 'Xem trạng thái trực tiếp: Trống, Đang sạc hoặc Bảo trì',
     step: '03',
   },
   {

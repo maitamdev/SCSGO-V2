@@ -1,22 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import './Chatbot.css';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
-
-const SYSTEM_PROMPT = `Bạn là "SBot" — trợ lý AI dễ thương và thân thiện của ứng dụng SCSGO (Smart Charging Station GO).
-Nhiệm vụ của bạn:
-- Trả lời câu hỏi về các trạm sạc xe điện (EV charging stations) tại Việt Nam.
-- Tư vấn địa điểm sạc gần nhất, đánh giá trạm sạc, giá cả, thời gian sạc.
-- Hướng dẫn sử dụng app SCSGO.
-- Cung cấp thông tin về xe điện VinFast và các dòng xe EV phổ biến.
-- Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu, thân thiện với emoji phù hợp.
-- Nếu không biết câu trả lời, hãy thành thật nói và gợi ý người dùng liên hệ hotline SCSGO.
-Giọng điệu: vui vẻ, gần gũi như một người bạn nhỏ đáng yêu 🤖⚡`;
-
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,41 +47,13 @@ const Chatbot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const apiKey = import.meta.env.VITE_GROQ_API_KEY;
-      if (!apiKey) {
-        setMessages(prev => [...prev, {
-          role: 'assistant',
-          content: '⚠️ Chưa cấu hình API key. Vui lòng thêm VITE_GROQ_API_KEY vào file .env nhé!'
-        }]);
-        setIsLoading(false);
-        return;
-      }
-
-      const response = await fetch(GROQ_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            ...newMessages.map(m => ({ role: m.role, content: m.content }))
-          ],
-          temperature: 0.7,
-          max_tokens: 1024,
-        }),
+      const { data, error } = await supabase.functions.invoke('chatbot', {
+        body: { messages: newMessages.slice(-12) },
       });
-
-      if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      if (error) throw error;
       const assistantMessage: Message = {
         role: 'assistant',
-        content: data.choices[0]?.message?.content || 'Hmm, mình không hiểu lắm. Bạn hỏi lại nhé! 🤔',
+        content: typeof data?.reply === 'string' ? data.reply : 'Mình chưa xử lý được câu hỏi này. Bạn thử hỏi lại nhé!',
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {

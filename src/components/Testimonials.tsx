@@ -19,7 +19,7 @@ const Testimonials: React.FC = () => {
           {reviews.map((rev, idx) => (
             <div className="minimal-card review-card" key={idx}>
               <p className="review-text">"{rev.text}"</p>
-              <div className="review-author">— {rev.author}</div>
+              <div className="review-author">{rev.author}</div>
             </div>
           ))}
         </div>

@@ -1,174 +1,146 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { CalendarDays, ChevronRight, Filter, LocateFixed, MapPin, Route, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import AppMap from '../../components/AppMap';
+import StationCard from '../../components/StationCard';
 import { useAuth } from '../../contexts/AuthContext';
+import { loadBookings, type WebBooking } from '../../data/bookings';
+import { getDirectionsUrl, type ChargingStation } from '../../data/stations';
+import { useStations } from '../../hooks/useStations';
 import { supabase } from '../../lib/supabase';
 import './AppScreens.css';
 
-interface PlaceItem {
-  id: string;
-  place_id: string;
-  title: string;
-  address: string;
-  rating: number;
-  type: string;
-}
-
 export default function HomeScreen() {
   const { user, profile } = useAuth();
-  const [places, setPlaces] = useState<PlaceItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const { stations, isLoading } = useStations();
+  const [selected, setSelected] = useState<ChargingStation | null>(null);
+  const [toast, setToast] = useState('');
+  const [upcomingBooking, setUpcomingBooking] = useState<WebBooking | null>(null);
+  const profileRecord = profile as Record<string, string> | null;
+  const displayName = profileRecord?.display_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'bạn';
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Chào buổi sáng ☀️';
-    if (hour < 18) return 'Chào buổi chiều 🌤️';
-    return 'Chào buổi tối 🌙';
-  };
-
-  const displayName = (profile as Record<string, string>)?.display_name
-    || user?.user_metadata?.full_name
-    || user?.email?.split('@')[0]
-    || 'Người dùng';
+  const handleSelect = useCallback((station: ChargingStation) => setSelected(station), []);
+  const handleOpenDetails = useCallback((station: ChargingStation) => {
+    navigate(`/app/stations/${station.id}`);
+  }, [navigate]);
 
   useEffect(() => {
-    loadPlaces();
+    const refresh = async () => {
+      try {
+        const bookings = await loadBookings();
+        setUpcomingBooking(bookings.find(item => item.status === 'confirmed') || null);
+      } catch {
+        setUpcomingBooking(null);
+      }
+    };
+    void refresh();
+    window.addEventListener('scsgo-bookings-updated', refresh);
+    return () => window.removeEventListener('scsgo-bookings-updated', refresh);
   }, []);
 
-  const loadPlaces = async () => {
-    setLoading(true);
-    try {
-      // Load favorites as "places" for now (the Flutter app uses external API for places)
-      const { data } = await supabase
-        .from('favorites')
-        .select()
-        .eq('user_id', user?.id ?? '')
-        .order('created_at', { ascending: false });
-
-      if (data) {
-        setPlaces(data.map((item: Record<string, unknown>) => {
-          const pd = (item.place_data || {}) as Record<string, unknown>;
-          return {
-            id: item.id as string,
-            place_id: (item.place_id || '') as string,
-            title: (pd.title || pd.name || 'Trạm sạc') as string,
-            address: (pd.address || pd.vicinity || 'Không rõ địa chỉ') as string,
-            rating: (pd.rating || 0) as number,
-            type: (pd.type || 'charging') as string,
-          };
-        }));
-      }
-    } catch (e) {
-      console.error('Load places error:', e);
-    }
-    setLoading(false);
+  const saveStation = async (station: ChargingStation) => {
+    if (!user) return;
+    const { error } = await supabase.from('favorites').upsert({
+      user_id: user.id,
+      place_id: station.id,
+      place_data: station,
+    }, { onConflict: 'user_id,place_id' });
+    setToast(error ? 'Chưa thể lưu trạm. Vui lòng thử lại.' : `Đã lưu ${station.name}`);
+    window.setTimeout(() => setToast(''), 2600);
   };
 
-  const filteredPlaces = places.filter(p =>
-    p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.address.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'cafe': return '☕';
-      case 'restaurant': return '🍽️';
-      case 'charging': return '⚡';
-      case 'restroom': return '🚻';
-      default: return '📍';
-    }
-  };
+  const nearby = stations.slice(0, 4);
 
   return (
-    <div className="app-screen">
-      {/* Header */}
-      <div className="app-header">
-        <div className="app-header-row">
-          <div className="app-location-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#2563eb"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          </div>
-          <div className="app-header-text">
-            <span className="app-greeting">{getGreeting()}</span>
-            <span className="app-username">{displayName}</span>
-          </div>
-          <div className="app-header-actions">
-            <button className="app-icon-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </button>
-            <button className="app-icon-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Search */}
-        <div className="app-search-bar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" placeholder="Tìm trạm sạc gần bạn..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-        </div>
-      </div>
-
-      {/* Filter chips */}
-      <div className="app-filter-chips">
-        {['Tất cả', 'Trạm sạc', 'Quán café', 'Nhà hàng', 'Nghỉ chân'].map(chip => (
-          <button key={chip} className="app-chip">{chip}</button>
-        ))}
-      </div>
-
-      {/* Banner */}
-      <div className="app-banner">
-        <div className="app-banner-content">
-          <span className="app-banner-tag">🔥 Khuyến mãi</span>
-          <h3>Sạc miễn phí 2 lần đầu</h3>
-          <p>Dành cho người dùng mới đăng ký tài khoản SCSGO</p>
-        </div>
-      </div>
-
-      {/* Section header */}
-      <div className="app-section-header">
+    <div className="app-page">
+      <header className="page-heading">
         <div>
-          <h2>Địa điểm gần đây</h2>
-          <span>{filteredPlaces.length} địa điểm</span>
+          <h1>Chào buổi sáng, {displayName}</h1>
+          <p>Tìm điểm sạc phù hợp và tiếp tục hành trình của bạn.</p>
         </div>
+        <div className="page-actions">
+          <button className="secondary-button" type="button" onClick={() => navigate('/app/map')}><MapPin size={16} /> Xem bản đồ</button>
+          <button className="primary-button" type="button" onClick={() => navigate('/app/map')}><Zap size={16} /> Tìm trạm sạc</button>
+        </div>
+      </header>
+
+      <div className="dashboard-grid">
+        <div className="dashboard-left">
+          <section className="surface-panel station-list-panel">
+            <div className="section-heading">
+              <div><h2>Trạm gần bạn</h2><p>{stations.length} trạm trong khu vực</p></div>
+              <button className="text-button" type="button" onClick={() => navigate('/app/map')}>Xem tất cả</button>
+            </div>
+            <div className="station-stack">
+              {isLoading ? [1, 2, 3].map(item => <div key={item} className="station-card compact skeleton" style={{ minHeight: 96 }} />) : nearby.map(station => (
+                <StationCard
+                  key={station.id}
+                  station={station}
+                  compact
+                  active={(selected?.id || stations[0]?.id) === station.id}
+                  onClick={() => setSelected(station)}
+                  onSave={() => void saveStation(station)}
+                />
+              ))}
+            </div>
+          </section>
+
+          <section className="surface-panel upcoming-card">
+            <div className="section-heading"><h2>Lịch sạc sắp tới</h2><CalendarDays size={18} color="var(--app-primary)" /></div>
+            {upcomingBooking ? (() => {
+              const bookingDate = new Date(`${upcomingBooking.date}T12:00:00`);
+              const bookingStation = stations.find(item => item.id === upcomingBooking.stationId);
+              return (
+                <div className="booking-mini">
+                  <div className="booking-date-tile"><strong>{bookingDate.getDate().toString().padStart(2, '0')}</strong><small>Tháng {bookingDate.getMonth() + 1}</small></div>
+                  <div>
+                    <span className="status-badge available">Đã xác nhận</span>
+                    <h3>{upcomingBooking.stationName}</h3>
+                    <p>{upcomingBooking.time}<br />{upcomingBooking.connector}</p>
+                  </div>
+                  <div className="booking-mini-actions">
+                    <button className="primary-button" type="button" onClick={() => navigate('/app/bookings')}>Xem lịch</button>
+                    {bookingStation && <a className="secondary-button" href={getDirectionsUrl(bookingStation)} target="_blank" rel="noreferrer"><Route size={15} /> Chỉ đường</a>}
+                  </div>
+                </div>
+              );
+            })() : (
+              <div className="booking-mini booking-mini-empty">
+                <div className="empty-state-icon"><CalendarDays size={22} /></div>
+                <div><h3>Chưa có lịch sạc</h3><p>Đặt trước một trạm để giữ chỗ và không phải chờ.</p></div>
+                <button className="primary-button" type="button" onClick={() => navigate('/app/map')}>Đặt lịch</button>
+              </div>
+            )}
+          </section>
+        </div>
+
+        <section className="surface-panel map-panel">
+          <div className="map-panel-toolbar">
+            <button className="map-control" type="button" onClick={() => navigate('/app/map')}><LocateFixed size={15} /> Gần tôi</button>
+            <button className="map-control" type="button" onClick={() => navigate('/app/map')}><Filter size={15} /> Bộ lọc</button>
+          </div>
+          <AppMap
+            stations={stations}
+            selectedId={selected?.id || stations[0]?.id}
+            onSelect={handleSelect}
+            onOpenDetails={handleOpenDetails}
+            compact
+          />
+          <div className="map-legend">
+            <span className="legend-item"><i className="legend-swatch" /> Còn trống</span>
+            <span className="legend-item"><i className="legend-swatch busy" /> Sắp đầy</span>
+          </div>
+        </section>
       </div>
 
-      {/* Place list */}
-      <div className="app-place-list">
-        {loading ? (
-          <>
-            {[1, 2, 3].map(i => (
-              <div key={i} className="app-place-card shimmer">
-                <div className="shimmer-icon" />
-                <div className="shimmer-lines">
-                  <div className="shimmer-line w60" />
-                  <div className="shimmer-line w80" />
-                </div>
-              </div>
-            ))}
-          </>
-        ) : filteredPlaces.length === 0 ? (
-          <div className="app-empty">
-            <span style={{ fontSize: 48 }}>🔍</span>
-            <h3>Không tìm thấy địa điểm</h3>
-            <p>Thử thay đổi bộ lọc hoặc mở rộng khu vực tìm kiếm</p>
-          </div>
-        ) : (
-          filteredPlaces.map(place => (
-            <div key={place.id} className="app-place-card">
-              <div className="app-place-icon">{getTypeIcon(place.type)}</div>
-              <div className="app-place-info">
-                <h4>{place.title}</h4>
-                <p>{place.address}</p>
-                {place.rating > 0 && (
-                  <div className="app-place-rating">
-                    <span>⭐</span> {place.rating.toFixed(1)}
-                  </div>
-                )}
-              </div>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-          ))
-        )}
-      </div>
+      {selected && (
+        <div className="toast" role="status">
+          <Zap size={16} /> {selected.name}
+          <button className="text-button" type="button" onClick={() => navigate(`/app/stations/${selected.id}`)}>Chi tiết <ChevronRight size={14} /></button>
+        </div>
+      )}
+      {toast && <div className="toast" role="status">{toast}</div>}
     </div>
   );
 }

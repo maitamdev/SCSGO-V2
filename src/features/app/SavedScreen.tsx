@@ -1,85 +1,71 @@
 import { useEffect, useState } from 'react';
+import { Bookmark, Gauge, MapPin, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
+import { formatPower, type ChargingStation } from '../../data/stations';
 import { supabase } from '../../lib/supabase';
 
 interface SavedPlace {
   id: string;
   place_id: string;
-  place_data: Record<string, unknown>;
-  created_at: string;
+  place_data: Partial<ChargingStation> & Record<string, unknown>;
 }
 
 export default function SavedScreen() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [saved, setSaved] = useState<SavedPlace[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadSaved();
-  }, []);
-
-  const loadSaved = async () => {
     if (!user) return;
-    setLoading(true);
-    try {
-      const { data } = await supabase
-        .from('favorites')
-        .select()
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      setSaved((data as SavedPlace[]) || []);
-    } catch (e) {
-      console.error('Load saved error:', e);
-    }
-    setLoading(false);
-  };
+    let active = true;
+    supabase.from('favorites').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).then(({ data }) => {
+      if (active) {
+        setSaved((data as SavedPlace[]) || []);
+        setLoading(false);
+      }
+    });
+    return () => { active = false; };
+  }, [user]);
 
   const removeSaved = async (placeId: string) => {
     if (!user) return;
+    setSaved(current => current.filter(item => item.place_id !== placeId));
     await supabase.from('favorites').delete().eq('user_id', user.id).eq('place_id', placeId);
-    loadSaved();
   };
 
   return (
-    <div className="app-screen">
-      <div className="app-header">
-        <div className="app-header-row">
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#0f172a' }}>Đã lưu</h2>
-          <span style={{ marginLeft: 'auto', fontSize: 13, color: '#64748b' }}>{saved.length} địa điểm</span>
-        </div>
-      </div>
-
-      <div className="app-place-list">
-        {loading ? (
-          [1, 2, 3].map(i => (
-            <div key={i} className="app-place-card shimmer">
-              <div className="shimmer-icon" /><div className="shimmer-lines"><div className="shimmer-line w60" /><div className="shimmer-line w80" /></div>
-            </div>
-          ))
-        ) : saved.length === 0 ? (
-          <div className="app-empty">
-            <span style={{ fontSize: 48 }}>🔖</span>
-            <h3>Chưa lưu địa điểm</h3>
-            <p>Nhấn biểu tượng trái tim để lưu trạm sạc yêu thích</p>
-          </div>
-        ) : (
-          saved.map(item => {
-            const pd = item.place_data || {};
+    <div className="app-page">
+      <header className="page-heading"><div><h1>Trạm đã lưu</h1><p>{saved.length} địa điểm trong bộ sưu tập của bạn.</p></div></header>
+      {loading ? <div className="saved-grid">{[1, 2, 3].map(item => <div key={item} className="surface-panel skeleton" style={{ minHeight: 300 }} />)}</div> : saved.length === 0 ? (
+        <section className="surface-panel empty-state">
+          <div className="empty-state-icon"><Bookmark size={27} /></div>
+          <h2>Chưa có trạm đã lưu</h2>
+          <p>Lưu các trạm thường dùng để kiểm tra tình trạng và đặt chỗ nhanh hơn.</p>
+          <button className="primary-button" type="button" onClick={() => navigate('/app/map')}>Khám phá trạm sạc</button>
+        </section>
+      ) : (
+        <div className="saved-grid">
+          {saved.map(item => {
+            const station = item.place_data;
             return (
-              <div key={item.id} className="app-place-card">
-                <div className="app-place-icon">⚡</div>
-                <div className="app-place-info">
-                  <h4>{(pd.title || pd.name || 'Trạm sạc') as string}</h4>
-                  <p>{(pd.address || pd.vicinity || '') as string}</p>
+              <article className="surface-panel saved-card" key={item.id}>
+                <div className="saved-card-image">
+                  <img src={String(station.image || station.thumbnail || '/charging_station.png')} alt={`Trạm sạc ${String(station.name || station.title || '')}`} />
+                  <button className="icon-button" type="button" aria-label="Bỏ lưu" onClick={() => void removeSaved(item.place_id)}><Trash2 size={17} /></button>
                 </div>
-                <button className="app-icon-btn" onClick={() => removeSaved(item.place_id)} title="Bỏ lưu">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
-              </div>
+                <div className="saved-card-content">
+                  <span className="status-badge available">Còn trống</span>
+                  <h3>{String(station.name || station.title || 'Trạm sạc SCSGO')}</h3>
+                  <p><MapPin size={13} /> {String(station.address || 'TP. Hồ Chí Minh')}</p>
+                  <div className="saved-card-footer"><span><Gauge size={13} /> {formatPower({ ...station, powerKw: Number(station.powerKw || 120) } as ChargingStation)}</span><button className="text-button" type="button" onClick={() => navigate(`/app/stations/${item.place_id}`)}>Xem chi tiết</button></div>
+                </div>
+              </article>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
     </div>
   );
 }

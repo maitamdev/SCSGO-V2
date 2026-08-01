@@ -11,6 +11,7 @@ interface AuthContextType {
   signInWithEmail: (email: string, password: string) => Promise<boolean>;
   signUp: (email: string, password: string, displayName: string) => Promise<boolean>;
   signOut: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -112,6 +113,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearError = () => setError(null);
+  const refreshProfile = async () => {
+    if (user) await loadProfile(user.id);
+  };
 
   const parseError = (msg: string): string => {
     switch (msg) {
@@ -123,12 +127,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, isLoading, error, signInWithEmail, signUp, signOut, clearError }}>
+    <AuthContext.Provider value={{ session, user, profile, isLoading, error, signInWithEmail, signUp, signOut, refreshProfile, clearError }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error('useAuth must be used within AuthProvider');
